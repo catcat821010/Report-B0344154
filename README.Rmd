@@ -28,7 +28,26 @@ output: github_document
 
 載入使用資料們
 ```{r}
-#這是R Code Chunk
+library(rvest)
+library(stringr)
+library(data.table)
+#Sys.setlocale(category = "LC_ALL", locale = "kor")
+#Sys.setlocale(category = "LC_ALL", locale = "cht")
+
+
+totalData<-NULL
+
+GaonDownloadChart<-"http://gaonchart.co.kr/main/section/chart/online.gaon?nationGbn=T&serviceGbn=S1020"
+DLCContent<-read_html(GaonDownloadChart)
+DLCAlbum <- str_trim(DLCContent %>% html_nodes("td") %>% html_text())
+for(i in 0:99){
+tempData<-data.table(DLCAlbum[4+8*i])
+
+totalData<-rbind(totalData,tempData)
+
+}
+
+totalData
 ```
 
 ## 資料處理與清洗
